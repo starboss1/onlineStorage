@@ -4,8 +4,12 @@
   "description": "lab2",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+ "build":"webpack", "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sergei Konoshenko",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
+  }
 }
