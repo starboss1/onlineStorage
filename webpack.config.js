@@ -1,16 +1,14 @@
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
  
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'docs'),
-        filename: 'js/main.js',
+        path: path.resolve(__dirname, 'docs/js'),
+        filename: 'main.js',
     },
-};
 
-module.exports = {
-    // ...previous Webpack config...
-    module: {
+        module: {
         rules: [
             {
                 test: /\.m?js$/,
@@ -22,19 +20,7 @@ module.exports = {
                     },
                 },
             },
-            // ...additional rules...
-        ],
-    },
-};
 
-// ... contents of webpack.config.js
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
- 
-module.exports = {
-    // ...previous Webpack config...
-    module: {
-        rules: [
-            // ...additional rules...
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
@@ -43,9 +29,10 @@ module.exports = {
                     'sass-loader',
                 ],
             },
+
         ],
     },
-    // ...previous Webpack config...
+
     plugins: [
         new MiniCssExtractPlugin({
             filename: "css/[name].css",
