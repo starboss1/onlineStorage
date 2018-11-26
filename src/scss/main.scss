@@ -1,0 +1,89 @@
+ * {
+ 	&, &:before, &:after {
+ 		margin: 0;
+ 		padding: 0;
+ 		box-sizing: border-box;
+ 	}
+ }
+ 
+ html {
+ 	font-family: Arial, sans-serif;
+}
+
+.product-price{
+display:block;
+}
+
+.product{
+	position: relative;
+}
+.product>span{
+	padding:5px 2px;
+}
+
+.product-title{
+	line-height:1.4em;
+	min-height:2.8em;
+}
+
+.prices{
+	margin-bottom:40px;
+}
+
+.product-buy{
+	position:absolute;
+	bottom:10px;
+}
+
+.product-price-old{
+	text-decoration:line-through;
+}
+.product-special-price{
+color: #fb515d;
+}
+
+
+.cart{
+	height: 70px;
+}
+.cart a{
+    position: absolute;
+    top: 5px;
+    right: 36px;
+}
+
+.cartTitle{
+	display:block;
+	padding-left:5px;
+}
+
+.counter{
+display:none;
+    position: absolute;
+    top: -2px;
+    left: 31px;
+    min-width: 23px;
+    height: 23px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 1px 2px;
+    font-size: 17px;
+    line-height: 21px;
+    color: #fff;
+    text-align: center;
+    background: #fb3f4c;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.cart img{
+	width:37px;
+}
+
+
+
+@import "~bootstrap/scss/bootstrap";
+.product-image {
+	max-height: 200px;
+	object-fit: contain;
+}
