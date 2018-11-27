@@ -62,6 +62,96 @@ $(document).on('click','.category',function(){
 
 });
 
+
+$(document).on('click', '.cart>a', function(){
+	var tempObj = JSON.parse(localStorage.getItem("card"));
+	var t = [];
+	console.log(tempObj);
+	t[0] = 0;
+	for(var key in tempObj){
+		if(key == "counter")
+			continue;
+		t[''+key] = tempObj[key];
+		// t.push(tempObj[key]);
+	}
+
+	console.log(t);
+	let _createList = require('./modules/listInCart');
+
+	$('.modal-body').empty();
+
+	$('.modal-body').append(_createList(t));
+});
+
+$(document).on('click', '.cart-amount-plus', function(){
+	var $this = $(this);
+	var c = $this.siblings('.cart-amount-input-text');
+	var id = $this.closest('.cart-item').data('product-id');
+
+	var newNum = (+c.val())+1;
+
+	var productSum = $this.closest('.cart-item').find('.cart-sum-uah>span');
+	var oldProductSum = +productSum.text();
+	var newProductSum = +((oldProductSum/(+c.val())) * newNum);
+	productSum.text(newProductSum);
+
+	var oldTotalSum = $('.cart-total-uah>span').text();
+	var newTotalSum = +oldTotalSum - oldProductSum + newProductSum;
+	$('.cart-total-uah>span').text(newTotalSum);
+
+	c.val(newNum);
+	var tempObj = JSON.parse(localStorage.getItem("card"));
+	tempObj[id] = newNum;
+	var serialObj = JSON.stringify(tempObj);
+	window.localStorage.setItem("card", serialObj);
+});
+
+$(document).on('click', '.cart-amount-minus', function(){
+	var $this = $(this);
+	var c = $this.siblings('.cart-amount-input-text');
+	var id = $this.closest('.cart-item').data('product-id');
+
+	var newNum = (+c.val())-1;
+	if(newNum == 0)
+		return;
+
+
+	var productSum = $this.closest('.cart-item').find('.cart-sum-uah>span');
+	var oldProductSum = +productSum.text();
+	var newProductSum = +((oldProductSum/(+c.val())) * newNum);
+	productSum.text(newProductSum);
+
+	var oldTotalSum = $('.cart-total-uah>span').text();
+	var newTotalSum = +oldTotalSum - oldProductSum + newProductSum;
+	$('.cart-total-uah>span').text(newTotalSum);
+
+	c.val(newNum);
+	var tempObj = JSON.parse(localStorage.getItem("card"));
+	tempObj[id] = newNum;
+	var serialObj = JSON.stringify(tempObj);
+	window.localStorage.setItem("card", serialObj);
+});
+
+$(document).on('click', '.cart-check-icon', function(){
+	var $this = $(this);
+	var c = $($this.closest('.cart-item'));
+	var id = c.data('product-id');
+
+	var tempObj = JSON.parse(localStorage.getItem("card"));
+	tempObj['counter'] = tempObj['counter'] - tempObj[id];
+	delete tempObj[id];
+	var serialObj = JSON.stringify(tempObj);
+	window.localStorage.setItem("card", serialObj);
+
+	var productSum = $($this.closest('.cart-item').find('.cart-sum>.cart-sum-uah>span')).text();
+	var oldProductSum = $('.cart-total-uah>span').text();
+	var newProductSum = +oldProductSum - (+productSum);
+	$('.cart-total-uah>span').text(newProductSum);
+
+	$this.closest('.cart-item').remove();
+
+
+});
 // jQuery.ajax({
 // 	type: 'post',
 // 	url: 'https://nit.tron.net.ua/api/order/add';
@@ -88,7 +178,7 @@ $(document).on('click','.product-buy',function(){
 
 	}
 	else{
-		var tempObj = JSON.parse(localStorage.getItem("card"));
+		var tempObj = JSON.parse(window.localStorage.getItem("card"));
 		for(var key in tempObj){
 			if(key == id){
 				tempObj[""+key]++;
@@ -102,6 +192,6 @@ $(document).on('click','.product-buy',function(){
 		tempObj["counter"] = t;
 		$(".counter").text(t);
 		var serialObj = JSON.stringify(tempObj);
-		localStorage.setItem("card", serialObj);
+		window.localStorage.setItem("card", serialObj);
 	}
 });
