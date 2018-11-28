@@ -8,7 +8,6 @@ let _createListInCart = (
 	let $cartBody = $(`<div class='cart-body'>`);
 	let $cartList = $(`<div class="cart-list">`);
 	var totalSum = 0;
-	// for(let i = 1; i<c;i++){
 		for(let key in arrProduct){
 			if(key == 0)
 				continue;
@@ -61,21 +60,25 @@ $cartTotal.append($(`<div class="cart-total-label">`).append($cartSum));
 $cartBody.append($cartTotal);
 
 
-let $cartForm = ($(`<form>`));
+let $cartForm = ($(`<form id="clientForm">`));
 let $formGroup = ($(`<div class="form-group">`));
 $formGroup.append($(`<label for="inputName">`).text("Name"));
-$formGroup.append($(`<input type="text" class="form-control" id="inputName" placeholder="Enter name:">`));
+$formGroup.append($(`<input type="text" class="form-control" id="inputName" placeholder="Enter name:" required="required" >`));
 $cartForm.append($formGroup);
 
 $formGroup = ($(`<div class="form-group">`));
 $formGroup.append($(`<label for="inputPhone">`).text("Phone"));
-$formGroup.append($(`<input type="tel" class="form-control" id="inputPhone">`));
+$formGroup.append($(`<input type="tel" class="form-control" id="inputPhone" required="required" pattern="[0-9]{3,}">`));
 $cartForm.append($formGroup);
 
 $formGroup = ($(`<div class="form-group">`));
 $formGroup.append($(`<label for="inputEmail">`).text("Email"));
-$formGroup.append($(`<input type="email" class="form-control" id="inputEmail" placeholder="Enter your email:">`));
+$formGroup.append($(`<input type="email" class="form-control" id="inputEmail" placeholder="abc@abc.abc" required="required" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">`));
 $cartForm.append($formGroup);
+
+$cartForm.append($(`<button type="button" class="close btn btn-secondary" data-dismiss="modal">`).text("Close"))
+$cartForm.append($(`<button type="submit" class="checkout btn btn-primary">`).text("Checkout"));
+
 $cartBody.append($cartForm);
 return $cartBody;
 };

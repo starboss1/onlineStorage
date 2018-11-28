@@ -40,6 +40,8 @@ jQuery.ajax({
 	},
 });
 
+
+
 $(document).on('click','.category',function(){
 	var $this = $(this);
 	var id = $this.data('category-id');
@@ -63,7 +65,7 @@ $(document).on('click','.category',function(){
 });
 
 
-$(document).on('click', '.cart>a', function(){
+$(document).on('click', '.cart>a, .cart-image', function(){
 	var tempObj = JSON.parse(localStorage.getItem("card"));
 	var t = [];
 	console.log(tempObj);
@@ -102,6 +104,7 @@ $(document).on('click', '.cart-amount-plus', function(){
 	c.val(newNum);
 	var tempObj = JSON.parse(localStorage.getItem("card"));
 	tempObj[id] = newNum;
+	tempObj['counter'] = +tempObj['counter'] + 1;
 	var serialObj = JSON.stringify(tempObj);
 	window.localStorage.setItem("card", serialObj);
 });
@@ -128,6 +131,7 @@ $(document).on('click', '.cart-amount-minus', function(){
 	c.val(newNum);
 	var tempObj = JSON.parse(localStorage.getItem("card"));
 	tempObj[id] = newNum;
+	tempObj['counter'] = +tempObj['counter'] - 1;
 	var serialObj = JSON.stringify(tempObj);
 	window.localStorage.setItem("card", serialObj);
 });
@@ -138,7 +142,9 @@ $(document).on('click', '.cart-check-icon', function(){
 	var id = c.data('product-id');
 
 	var tempObj = JSON.parse(localStorage.getItem("card"));
-	tempObj['counter'] = tempObj['counter'] - tempObj[id];
+	var newCount = tempObj['counter'] - tempObj[id];
+	$('.counter').text(newCount);
+	tempObj['counter'] = newCount;
 	delete tempObj[id];
 	var serialObj = JSON.stringify(tempObj);
 	window.localStorage.setItem("card", serialObj);
@@ -151,6 +157,39 @@ $(document).on('click', '.cart-check-icon', function(){
 	$this.closest('.cart-item').remove();
 
 
+});
+
+$(document).on('click', '.checkout', function(e){
+	console.log("test");
+	var name = $('#inputName').val();
+	var phone = $('#inputPhone').val();
+	var email = $('#inputEmail').val();
+	var dataProducts = "";
+	var tempObj = JSON.parse(localStorage.getItem("card"));
+	for(var key in tempObj){
+		if(key == "counter")
+			continue;
+		dataProducts+="products["+key+"]="+tempObj[key]+"&";
+	}
+	if(name && phone && email && dataProducts){
+
+	jQuery.ajax({
+		url: 'https://nit.tron.net.ua/api/order/add',
+		method: 'post',
+		token: 'CtYYx-Z_oB-DmwlepHLS',
+		dataType: 'json',
+		data:
+		'name='+name+'&email='+email+'&phone='+phone+'&'+dataProducts+'token=CtYYx-Z_oB-DmwlepHLS',
+		success: function(json){
+			console.log("Test");
+			console.log(json);
+		},
+
+		error: function(xhr){
+			alert("An error occured: "+ xhr.status+" "+ xhr.statusText);
+		},
+});
+}
 });
 // jQuery.ajax({
 // 	type: 'post',
