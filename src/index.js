@@ -5,6 +5,18 @@ import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
+$(function(){
+	$('[rel="popover"]').popover({
+		container: 'body',
+		html: true,
+		content: function () {
+			var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+			return clone;
+		}
+	}).click(function(e) {
+		e.preventDefault();
+	});
+});
 
 let _createCart = require('./modules/cart');
 var tempObj = JSON.parse(localStorage.getItem("card"));
@@ -47,15 +59,19 @@ $(document).on('click','.category',function(){
 	var id = $this.data('category-id');
 	$(".product-grid").empty();
 	$(".btn-primary").text($this.children().text());
-	jQuery.ajax({	
-	url: 'https://nit.tron.net.ua/api/product/list/category/'+id,
+	let u;
+	if(id == "1")
+		u = 'https://nit.tron.net.ua/api/product/list/';
+	else
+		u = 'https://nit.tron.net.ua/api/product/list/category/'+id;
+
+	jQuery.ajax({
+	url:u,
 	method: 'get',
 	dataType: 'json',
 	success: function(json){
 		json.forEach(product => $('.product-grid').append(_createProduct(product)));
 	},
-
-	
 
 	error: function(xhr){
 		alert("An error occured: "+ xhr.status+" "+ xhr.statusText);
@@ -65,10 +81,9 @@ $(document).on('click','.category',function(){
 });
 
 
-$(document).on('click', '.cart>a, .cart-image', function(){
+$(document).on('click', '.cart-image', function(){
 	var tempObj = JSON.parse(localStorage.getItem("card"));
 	var t = [];
-	console.log(tempObj);
 	t[0] = 0;
 	for(var key in tempObj){
 		if(key == "counter")
@@ -77,7 +92,6 @@ $(document).on('click', '.cart>a, .cart-image', function(){
 		// t.push(tempObj[key]);
 	}
 
-	console.log(t);
 	let _createList = require('./modules/listInCart');
 
 	$('.modal-body').empty();
@@ -101,6 +115,8 @@ $(document).on('click', '.cart-amount-plus', function(){
 	var newTotalSum = +oldTotalSum - oldProductSum + newProductSum;
 	$('.cart-total-uah>span').text(newTotalSum);
 
+	$('.counter').text(+$('.counter').text()+1);
+
 	c.val(newNum);
 	var tempObj = JSON.parse(localStorage.getItem("card"));
 	tempObj[id] = newNum;
@@ -123,6 +139,8 @@ $(document).on('click', '.cart-amount-minus', function(){
 	var oldProductSum = +productSum.text();
 	var newProductSum = +((oldProductSum/(+c.val())) * newNum);
 	productSum.text(newProductSum);
+
+	$('.counter').text(+$('.counter').text()-1);
 
 	var oldTotalSum = $('.cart-total-uah>span').text();
 	var newTotalSum = +oldTotalSum - oldProductSum + newProductSum;
@@ -148,10 +166,7 @@ $(document).on('click', '.cart-check-icon', function(){
 	delete tempObj[id];
 	var serialObj = JSON.stringify(tempObj);
 	window.localStorage.setItem("card", serialObj);
-
-	var productSum = $($this.closest('.cart-item').find('.cart-sum>.cart-sum-uah>span')).text();
-	var oldProductSum = $('.cart-total-uah>span').text();
-	var newProductSum = +oldProductSum - (+productSum);
+	var newProductSum = +$('.cart-total-uah>span').text() - (+$($this.closest('.cart-item').find('.cart-sum>.cart-sum-uah>span')).text());
 	$('.cart-total-uah>span').text(newProductSum);
 
 	$this.closest('.cart-item').remove();
@@ -160,7 +175,6 @@ $(document).on('click', '.cart-check-icon', function(){
 });
 
 $(document).on('click', '.checkout', function(e){
-	console.log("test");
 	var name = $('#inputName').val();
 	var phone = $('#inputPhone').val();
 	var email = $('#inputEmail').val();
@@ -180,9 +194,12 @@ $(document).on('click', '.checkout', function(e){
 		dataType: 'json',
 		data:
 		'name='+name+'&email='+email+'&phone='+phone+'&'+dataProducts+'token=CtYYx-Z_oB-DmwlepHLS',
-		success: function(json){
-			console.log("Test");
-			console.log(json);
+		success: function(){
+			alert("Your order is accepted");
+			localStorage.removeItem("card");
+			$('.counter').text("0");
+			$('#exampleModalLong').modal('hide')
+
 		},
 
 		error: function(xhr){
@@ -191,12 +208,6 @@ $(document).on('click', '.checkout', function(e){
 });
 }
 });
-// jQuery.ajax({
-// 	type: 'post',
-// 	url: 'https://nit.tron.net.ua/api/order/add';
-// 	token: 'CtYYx-Z_oB-DmwlepHLS';
-// 	data: 
-// })
 
 
 
