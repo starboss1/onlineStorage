@@ -88,7 +88,6 @@ $(document).on('click', '.cart-image', function(){
 		if(key == "counter")
 			continue;
 		t[''+key] = tempObj[key];
-		// t.push(tempObj[key]);
 	}
 
 	let _createList = require('./modules/listInCart');
@@ -195,7 +194,8 @@ $(document).on('click', '.checkout', function(e){
 			alert("Your order is accepted");
 			localStorage.removeItem("card");
 			$('.counter').text("0");
-			$('#exampleModalLong').modal('hide')
+			$('#cartModal').modal('hide');
+			location.reload();
 
 		},
 
