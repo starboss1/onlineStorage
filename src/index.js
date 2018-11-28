@@ -77,7 +77,6 @@ $(document).on('click','.category',function(){
 		alert("An error occured: "+ xhr.status+" "+ xhr.statusText);
 	},
 });
-
 });
 
 
@@ -93,9 +92,7 @@ $(document).on('click', '.cart-image', function(){
 	}
 
 	let _createList = require('./modules/listInCart');
-
 	$('.modal-body').empty();
-
 	$('.modal-body').append(_createList(t));
 });
 

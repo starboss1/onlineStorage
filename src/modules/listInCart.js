@@ -1,10 +1,6 @@
 let _createListInCart = (
 	arrProduct,
 ) => {
-	// var c = 0;
-	// for (var key in arrProduct) {
-	// 	c++;
-	// }
 	let $cartBody = $(`<div class='cart-body'>`);
 	let $cartList = $(`<div class="cart-list">`);
 	var totalSum = 0;
@@ -12,13 +8,11 @@ let _createListInCart = (
 			if(key == 0)
 				continue;
 		jQuery.ajax({
-			// url: 'https://nit.tron.net.ua/api/product/'+i,
 			url: 'https://nit.tron.net.ua/api/product/'+key,
 			method:'get',
 			async:false,
 			dataType: 'json',
 			success: function(json){
-				// let $cartItem = $(`<div class='clearfix cart-item' data-product-id="${i}">`);
 				let $cartItem = $(`<div class='clearfix cart-item' data-product-id="${key}">`);
 				$cartItem.append($(`<div class="cart-check-wrap" name="activate">`).append($(`<a name="before_delete href="#" class="cart-check">`).append($(`<img src="https://i.rozetka.ua/design/_.gif" width="23" height="23" alt="✓" class="cart-check-icon sprite">`))));
 				let $cartInfo = ($(`<div class="cart-info">`));
@@ -28,12 +22,10 @@ let _createListInCart = (
 				let sum = 0;
 				if(json['special_price']){
 					$cartContent.append($(`<div class="cart-price">`).append($(`<span class="cart-uah">`).text(json['special_price'])));
-					// sum = json['special_price'] * arrProduct[json['id']];
 					sum = json['special_price'] * arrProduct[key];
 				}
 				else{
 					$cartContent.append($(`<div class="cart-price">`).append($(`<span class="cart-uah">`).text(json['price'])));
-					// sum = json['price'] * arrProduct[json['id']];
 					sum = json['price'] * arrProduct[key];	
 				}
 				totalSum+=sum;
@@ -50,7 +42,6 @@ let _createListInCart = (
 			},
 		});
 }
-console.log(totalSum);
 $cartBody.append($cartList);
 let $cartTotal = $(`<div class="cart-total clearfix">`);
 let $cartSum = $(`<div class="cart-total-sum" name="total">`);
